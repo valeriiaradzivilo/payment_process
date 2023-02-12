@@ -42,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    itemPrice = random.nextDouble()*200;
+    itemPrice = random.nextDouble()*500+200;
     super.initState();
   }
 
@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton.icon(onPressed: ()
         {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const CreditPayment()));
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => CreditPayment(itemPrice: itemPrice,)));
         },
               
           icon:Icon(Icons.credit_card),

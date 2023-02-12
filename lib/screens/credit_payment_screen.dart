@@ -1,5 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:payment_process/screens/failed_payment_screen.dart';
+import 'package:payment_process/screens/successful_screen.dart';
 
 import '../classes/balance.dart';
 import '../classes/paymentClass.dart';
@@ -18,7 +20,7 @@ class _CreditPaymentState extends State<CreditPayment> {
 
   @override
   void initState() {
-    balance = Balance(random.nextDouble()*200, random.nextDouble()*20);
+    balance = Balance(random.nextDouble()*200, random.nextDouble()*200);
     super.initState();
   }
   @override
@@ -33,17 +35,28 @@ class _CreditPaymentState extends State<CreditPayment> {
             children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("Your balance is : ${balance.getBalance()} and your credit balance is : ${balance.getCredit()}",
-                  textAlign: TextAlign.center,),
+                  child: Text.rich(
+                    TextSpan(
+
+                      children: [
+                        const TextSpan(text: "Your balance is : "),
+                        TextSpan(text: "${balance.getBalance()}", style: const TextStyle(fontWeight: FontWeight.bold)),
+                        const TextSpan(text: " and your credit balance is : "),
+                        TextSpan(text: "${balance.getCredit()}", style: const TextStyle(fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
                 ),
               ElevatedButton.icon(onPressed: ()
               {
-
-                CustomerOrder(CreditCard()).makePayment(widget.itemPrice, balance);
+                bool checkPayment = CustomerOrder(CreditCard()).makePayment(widget.itemPrice, balance);
+                StatefulWidget page;
+                checkPayment? page = const SuccessfulScreen(): page = const FailedPaymentScreen();
+                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => page));
               },
 
-                icon:Icon(Icons.credit_card),
-                label: Text("Pay"),
+                icon:const Icon(Icons.credit_card),
+                label: const Text("Pay"),
               ),
 
             ],
